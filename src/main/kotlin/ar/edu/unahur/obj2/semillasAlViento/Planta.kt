@@ -3,6 +3,11 @@ package ar.edu.unahur.obj2.semillasAlViento
 abstract class Planta(val anioObtencionSemilla: Int, var altura: Float) {
   fun esFuerte() = this.horasDeSolQueTolera() > 10
 
+
+  //Desacoplamiento:
+  /*Si hay acoplamiento entre los objetos puede aumentar los errores y cambios.*/
+  /*Esta tomando una resposabilidad que tendria que hacer la parcela.*/
+  /*Este metodo segun el enunciado tendria que ir en la clase parcela.*/
   fun parcelaTieneComplicaciones(parcela: Parcela) =
     parcela.plantas.any { it.horasDeSolQueTolera() < parcela.horasSolPorDia }
 
