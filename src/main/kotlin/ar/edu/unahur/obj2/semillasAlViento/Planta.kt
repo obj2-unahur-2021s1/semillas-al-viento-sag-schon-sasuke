@@ -3,7 +3,6 @@ package ar.edu.unahur.obj2.semillasAlViento
 abstract class Planta(val anioObtencionSemilla: Int, var altura: Float) {
   fun esFuerte() = this.horasDeSolQueTolera() > 10
 
-
   //Desacoplamiento:
   /*Si hay acoplamiento entre los objetos puede aumentar los errores y cambios.*/
   /*Esta tomando una resposabilidad que tendria que hacer la parcela.*/
@@ -21,6 +20,11 @@ class Menta(anioObtencionSemilla: Int, altura: Float) : Planta(anioObtencionSemi
 }
 
 class Soja(anioObtencionSemilla: Int, altura: Float, val esTransgenica: Boolean) : Planta(anioObtencionSemilla, altura) {
+
+  //Mutaciones Controladas:
+  /*Se hizo una variable "altura" que es mutable, pero en ningun comportamiento del objt veo que cambie.*/
+  /*Esto podria ocasionar problemas, con datos, si se cambia la altura por error, podria variar la "horaBase", esto puede traer problemas.*/
+  /*Tambien no veo que sea necesaria. A la hora de hacer mutabilidad y no usarla*/
   override fun horasDeSolQueTolera(): Int  {
     // ¡Magia de Kotlin! El `when` es como un `if` pero más poderoso:
     // evalúa cada línea en orden y devuelve lo que está después de la flecha.
