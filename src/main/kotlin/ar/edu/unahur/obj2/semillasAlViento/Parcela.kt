@@ -2,26 +2,17 @@ package ar.edu.unahur.obj2.semillasAlViento
 
 class Parcela(val ancho: Int, val largo: Int, val horasSolPorDia: Int) {
   val plantas = mutableListOf<Planta>()
+//  Simplicidad: no se pide saber cuantas plantas hay, ademas se podría hacer plantas.size().
   var cantidadPlantas = 0
 
   fun superficie() = ancho * largo
-
-  //Flexibilidad:
-  /*Si se ve con el paradigma del eje extensibilidad. Se prodria utilizar un metodo ya existenten para este comportamtiento.*/
-  /*Seria el metodo "superficie()". Este metodo se podria utilizar en "cantidadMaximaPlantas()".*/
-  //Cohesion:
-  /*Error de cohesion.*/
-  /*La clase internamente no se esta utilizando ella misma y por ende aumenta mas las responsabilidades de dicha clase.*/
-  /*Siendo menos cohesiva*/
-  /*No estaria llamando al metodo "superficie()".*/
-  //Redundacia minima:
-  /*Otro error encontrado, es codigo  redundante.*/
-  /*Es mas propenso a errores y mas dificil de ubicarlo, si se sigue este patron, y tambien no queda muy bien que digamos.*/
   fun cantidadMaximaPlantas() =
+//    Redundancia minima: no se hace uso de la función superficie.
     if (ancho > largo) ancho * largo / 5 else ancho * largo / 3 + largo
 
 
   fun plantar(planta: Planta) {
+//    Robustez: debe arrojar un error, no un print.
     if (cantidadPlantas == this.cantidadMaximaPlantas()) {
       println("Ya no hay lugar en esta parcela")
     } else if (horasSolPorDia > planta.horasDeSolQueTolera() + 2) {
@@ -34,19 +25,21 @@ class Parcela(val ancho: Int, val largo: Int, val horasSolPorDia: Int) {
 }
 
 class Agricultora(val parcelas: MutableList<Parcela>) {
+//  Mutación controlada: La lista de parcelas no tiene que poder modificarse.
   var ahorrosEnPesos = 20000
+//  Simplicidad: el ejercicio no pide un variable así.
 
 
   // Suponemos que una parcela vale 5000 pesos
+//  Simplicidad: método innecesario para el ejercicio.
   fun comprarParcela(parcela: Parcela) {
     if (ahorrosEnPesos >= 5000) {
       parcelas.add(parcela)
       ahorrosEnPesos -= 5000
     }
   }
-
-  //Redundacia minima:
-  /*El codigo es  repetitivo. Quedaria mejor si solo utiliamos el "it".*/
+//  Cohesion: la parcela tiene que resolver si es semillera o no y con un método poder preguntarle.
+//  Esta función tiene demasiadas responsabilidades.
   fun parcelasSemilleras() =
     parcelas.filter {
       parcela -> parcela.plantas.all {
@@ -54,8 +47,10 @@ class Agricultora(val parcelas: MutableList<Parcela>) {
       }
     }
 
+
   fun plantarEstrategicamente(planta: Planta) {
     val laElegida = parcelas.maxBy { it.cantidadMaximaPlantas() - it.cantidadPlantas }!!
+//  Redundancia minima: hace un add en vez de usar el método existente plantar()
     laElegida.plantas.add(planta)
   }
 }

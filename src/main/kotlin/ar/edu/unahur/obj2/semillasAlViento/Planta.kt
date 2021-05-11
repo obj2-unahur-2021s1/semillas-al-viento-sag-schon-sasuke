@@ -1,16 +1,15 @@
 package ar.edu.unahur.obj2.semillasAlViento
 
 abstract class Planta(val anioObtencionSemilla: Int, var altura: Float) {
+//  Simplicidad: la altura no debería poder cambiarse, el enunciado lo aclara.
   fun esFuerte() = this.horasDeSolQueTolera() > 10
 
-  //Desacoplamiento:
-  /*Si hay acoplamiento entre los objetos puede aumentar los errores y cambios.*/
-  /*Esta tomando una resposabilidad que tendria que hacer la parcela.*/
-  /*Este metodo segun el enunciado tendria que ir en la clase parcela.*/
+//  (Des)acoplamiento: Este método debería pertenecer a la clase "Parcela".
   fun parcelaTieneComplicaciones(parcela: Parcela) =
     parcela.plantas.any { it.horasDeSolQueTolera() < parcela.horasSolPorDia }
 
   abstract fun horasDeSolQueTolera(): Int
+
   abstract fun daSemillas(): Boolean
 }
 
@@ -20,11 +19,7 @@ class Menta(anioObtencionSemilla: Int, altura: Float) : Planta(anioObtencionSemi
 }
 
 class Soja(anioObtencionSemilla: Int, altura: Float, val esTransgenica: Boolean) : Planta(anioObtencionSemilla, altura) {
-
-  //Mutaciones Controladas:
-  /*Se hizo una variable "altura" que es mutable, pero en ningun comportamiento del objt veo que cambie.*/
-  /*Esto podria ocasionar problemas, con datos, si se cambia la altura por error, podria variar la "horaBase", esto puede traer problemas.*/
-  /*Tambien no veo que sea necesaria. A la hora de hacer mutabilidad y no usarla*/
+//  (Des)acomplamiento - Cohesion: esTransgénica no tendría que ser un atributo, sino ser una clase que hereda de "Soja".
   override fun horasDeSolQueTolera(): Int  {
     // ¡Magia de Kotlin! El `when` es como un `if` pero más poderoso:
     // evalúa cada línea en orden y devuelve lo que está después de la flecha.
@@ -33,12 +28,13 @@ class Soja(anioObtencionSemilla: Int, altura: Float, val esTransgenica: Boolean)
       altura < 1    -> 7
       else          -> 9
     }
-
+//  La soja no debería resolver los problemas de la soja transgénica.
     return if (esTransgenica) horasBase * 2 else horasBase
   }
 
 
   override fun daSemillas(): Boolean  {
+//  Acá el mismo problema que arriba.
     if (this.esTransgenica) {
       return false
     }
