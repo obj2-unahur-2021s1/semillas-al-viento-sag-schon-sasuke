@@ -8,8 +8,8 @@ import io.kotest.matchers.shouldBe
 
 class  Test : DescribeSpec ({
     val plantaDeMenta = Menta(2018,0.8F)
-    val plantaDeSoja = Soja(2019,0.9F,false)
-    val plantaSojaTransgenica = Soja(1996,1.5F,true)
+    val plantaDeSoja = Soja(2019,0.9F)
+    val plantaSojaTransgenica = SojaTransgenica(1996,1.5F)
 
     describe("Requerimiento 1"){
 
@@ -57,9 +57,11 @@ class  Test : DescribeSpec ({
         parcela2.plantar(plantaDeSoja2)
         parcela2.plantar(plantaDeSoja3)
         parcela2.plantar(plantaDeSoja4)
-//        parcela2.parcelaTieneComplicaciones().shouldBeFalse() -- Falta cambiar de lugar el método
+        parcela2.tieneComplicaciones().shouldBeFalse()
+        parcela2.plantas.size.shouldBe(4)
+        parcela2.cantidadMaximaPlantas().shouldBe(4)
 
-        val plantaDeSoja5 = Soja(2017,1F,false)
+        val plantaDeSoja5 = Soja(2017,1F)
         shouldThrowAny{
             parcela2.plantar(plantaDeSoja5)
         }
@@ -76,25 +78,18 @@ class  Test : DescribeSpec ({
         val agricultor = Agricultora(mutableListOf<Parcela>(parcela2,parcela3))
 
         it("Parcelas semilleras"){
-//            agricultor.parcelasSemilleras().shouldBe(true) -- Tiene que devolver un boolean
+            agricultor.parcelasSemilleras().shouldBe(true)
         }
 
         it("Poder plantar en la parcela que mas lugar tenga") {
             parcela3.plantar(plantaDeSoja)
             parcela3.plantar(plantaSojaTransgenica)
 
-            parcela3.cantidadPlantas.shouldBe(3)
-
-            parcela2.cantidadPlantas.shouldBe(1)
+            parcela2.plantas.size.shouldBe(1)
 
             agricultor.plantarEstrategicamente(plantaDeSoja)
 
-            agricultor.parcelas.size.shouldBe(2)
-
-            parcela3.cantidadPlantas.shouldBe(3)
-
-            parcela2.cantidadPlantas.shouldBe(2) // No funca
-
+            parcela2.plantas.size.shouldBe(2)
         }
     }
 
